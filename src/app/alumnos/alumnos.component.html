@@ -1,0 +1,139 @@
+<div class="card">
+    <div class="card-body">
+      <div class="row" style="padding:10px;">
+        <h6 class="col-md-8 text-center">
+          Lista de Alumnos
+        </h6>
+        <div class="col-md-2">
+          <button (click)="MostrarFormularioEdit=!MostrarFormularioEdit" class="btn btn-primary">
+            Agregar Alumno
+          </button>
+        </div>
+        <div class="col-md-2">
+          <button class="btn btn-primary">
+              Agregar Estado
+          </button>
+        </div>
+      </div>
+      <table class="table table-sm table-hover">
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>Estado</th>
+        <th>Promedio</th>
+        <th colspan="2">Acciones</th>
+        <tbody>
+          <tr *ngFor = "let alumno of AlumnosArray;let i = index">
+            <td>{{alumno.id}}</td>
+            <td>
+                {{alumno.nombre}}
+            </td>
+            <td>
+                <div *ngFor ="let estado of estados">
+                  <div *ngIf="estado.id == alumno.estado">
+                      {{alumno.estado}} {{estado.nombre}}
+                  </div>
+                  
+                </div>
+                
+            </td>
+            <td>
+                <b [ngStyle]= "{'color': alumno.promedio<4?'red':'blue'}">{{alumno.promedio}}</b>
+              </td>
+            <td>
+              <a class="btn btn-secondary text-white" (click)="Editar(alumno)">
+                  <i class="far fa-edit"></i>
+                  Editar
+              </a>
+            </td>
+            <td>
+              <a class="btn btn-danger text-white" (click)="onDelete(alumno)">
+                  <i class="fas fa-trash-alt"></i>
+                  Eliminar
+              </a>
+            </td>
+            <td>
+                <a class="btn btn-primary text-white" (click)="FormCalificar(alumno)">
+                    <i class="fas fa-trash-alt"></i>
+                    Calificar
+                </a>
+              </td>
+          </tr>
+        </tbody>
+      </table>
+     
+
+      <div class="container p-4">
+        <div class="row">
+           <!--formulario editar-->
+          <div class="col-md-4"  [hidden] = "!MostrarFormularioEdit">
+            <div class="card">
+              <form class="card-body">
+                <h3 class="card-title">Agregar / Editar Alumno</h3>
+                <label for="title">Nombre</label>
+                <input type="text" name="Nombre" [(ngModel)]="AlumnosSelect.nombre" #newNombre class="form-control" autofocus>
+      
+                <button (click)="GuardarAgregarEdit()" class="btn btn-primary btn-block mt-4">
+                  Guardar
+                </button>
+                {{AlumnosArray | json}}
+              </form>
+            </div>
+          </div>
+           <!--/ formulario editar-->
+          <!-- FORM Calificar-->
+          <div class="col-md-4" [hidden] = "!Promediar.alumno.id>0">
+            <div class="card">
+              <form class="card-body">
+                <h3 class="card-title">Calificar Alumno</h3>
+                <label for="nombre">Nombre</label>
+                <input   type="text" name="nombre" #nombre [value] = "Promediar.alumno.nombre? Promediar.alumno.nombre:''" class="form-control" disabled=true>
+
+                <label for="nota1">Nota 1</label>
+                <input type="text" name="nota1" [(ngModel)] = "Promediar.nota1" class="form-control" autofocus>
+                <label for="nota2">Nota 2</label>
+                <input type="text" name="nota2" [(ngModel)] = "Promediar.nota2"  class="form-control">
+                <button (click)="calificar()" class="btn btn-primary btn-block mt-4">
+                  Promediar
+                </button>
+              </form>
+            </div>
+          </div>
+          <!-- / FORM Calificar-->
+
+          <!-- FORM ESTADOS-->
+          <div class="col-md-4" [hidden] = "!1==1">
+            <div class="card">
+              <form class="card-body">
+                <h3 class="card-title">Estados</h3>
+                <!--listar estado-->
+                <table class="table table-sm table-hover">
+                  <tr *ngFor="let estado of estados">
+                      <td >{{estado.id}} </td>
+                      <td >{{estado.nombre}} </td>
+                      <td> 
+                        <button (click)="EditarEstado(estado)" class="btn btn-primary">
+                          Editar
+                        </button>
+                      </td>
+                      <td>
+                        <button (click)="EliminarEstado(estado)" class="btn btn-danger text-white">
+                            Eliminar
+                          </button> 
+                      </td>
+                  </tr>
+                  
+                </table>
+                <!--nuevo estado-->
+                <label for="Nombre">Nombre Estado</label>
+                <input type="text" name="Nombre" [(ngModel)]="estadoSelect.nombre" class="form-control" autofocus>
+      
+                <button (click)="AgregaEstado()" class="btn btn-primary btn-block mt-4">
+                  Guardar
+                </button>
+              </form>
+            </div>
+          </div>
+
+        </div>
+    </div>
+  </div>
